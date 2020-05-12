@@ -3,5 +3,5 @@ variable "env" {
 }
 
 variable "google_credentials" {
-    type = string
+  type = string
 }
