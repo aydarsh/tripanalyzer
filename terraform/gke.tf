@@ -1,9 +1,11 @@
 resource "google_project_service" "project-gke-api" {
-  service = "container.googleapis.com"
+  service            = "container.googleapis.com"
+  disable_on_destroy = false
 }
 
 resource "google_project_service" "project-rm-api" {
-  service = "cloudresourcemanager.googleapis.com"
+  service            = "cloudresourcemanager.googleapis.com"
+  disable_on_destroy = false
 }
 
 resource "google_container_cluster" "primary" {
