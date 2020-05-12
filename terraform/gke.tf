@@ -1,13 +1,3 @@
-resource "google_project_service" "project-gke-api" {
-  service            = "container.googleapis.com"
-  disable_on_destroy = false
-}
-
-resource "google_project_service" "project-rm-api" {
-  service            = "cloudresourcemanager.googleapis.com"
-  disable_on_destroy = false
-}
-
 resource "google_container_cluster" "primary" {
   name               = "trip-analyzer-${var.env}"
   location           = "us-central1-a"
