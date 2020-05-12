@@ -1,5 +1,9 @@
-resource "google_project_service" "project" {
+resource "google_project_service" "project-gke-api" {
   service = "container.googleapis.com"
+}
+
+resource "google_project_service" "project-rm-api" {
+  service = "cloudresourcemanager.googleapis.com"
 }
 
 resource "google_container_cluster" "primary" {
