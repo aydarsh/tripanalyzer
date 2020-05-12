@@ -1,3 +1,7 @@
+resource "google_project_service" "project" {
+  service = "container.googleapis.com"
+}
+
 resource "google_container_cluster" "primary" {
   name               = "trip-analyzer-${var.env}"
   location           = "us-central1-a"
