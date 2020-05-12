@@ -1,4 +1,3 @@
-variable "environment" {
-  default = "dev"
+variable "env" {
   type = string
 }

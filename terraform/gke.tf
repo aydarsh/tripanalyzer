@@ -1,5 +1,5 @@
 resource "google_container_cluster" "primary" {
-  name               = "trip-analyzer-${var.environment}"
+  name               = "trip-analyzer-${var.env}"
   location           = "us-central1-a"
   initial_node_count = 1
 
@@ -24,7 +24,7 @@ resource "google_container_cluster" "primary" {
     }
 
     labels = {
-      env = "dev"
+      env = var.env
     }
 
   }
