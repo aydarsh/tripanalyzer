@@ -9,8 +9,8 @@
   * env - environment: env, prod
   * google_credentials - base64 encoded service account key
 * A service account is created in GCP for each of the environments: trip-analyzer-dev, trip-analyzer-prod
-* Service accounts are assigned roles:
-  * Kubernetes Engine Admin
-  * Service Usage Admin
-  * Editor
+* Service accounts are assigned `Editor` role
+* The following APIs are enabled by means of the GCP Console:
+  * Kubernetes Engine API
+  * Cloud Resource Manager API
  
