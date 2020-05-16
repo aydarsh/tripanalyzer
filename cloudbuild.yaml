@@ -23,7 +23,7 @@ steps:
       - '-c'
       - |
         set -x && \
-        cd tripanalyzer && \
+        ls -l && \
         git checkout dev && \
         git add env/trip-deployment.yaml && \
         git commit -m "Deploying image gcr.io/${PROJECT_ID}/trip:${SHORT_SHA}
