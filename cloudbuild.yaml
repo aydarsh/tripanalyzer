@@ -52,6 +52,8 @@ steps:
     args:
       - '-c'
       - |
+        ls -l && \
+        ls -l env/ && \
         sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" env/trip-deployment.yaml.tpl | \
         sed "s/COMMIT_SHA/${SHORT_SHA}/g" > env/trip-deployment.yaml
 
