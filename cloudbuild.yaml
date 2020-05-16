@@ -52,6 +52,7 @@ steps:
     args:
       - '-c'
       - |
+        set -x && \
         sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" env/trip-deployment.yaml.tpl | \
         sed "s/COMMIT_SHA/${SHORT_SHA}/g" > env/trip-deployment.yaml
 
@@ -62,7 +63,6 @@ steps:
       - |
         set -x && \
         cd tripanalyzer && \
-        ls -l && \
         ls -l env/ && \
         git add env/trip-deployment.yaml && \
         git commit -m "Deploying image gcr.io/${PROJECT_ID}/trip:${SHORT_SHA}
