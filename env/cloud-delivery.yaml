@@ -1,0 +1,18 @@
+# [START cloudbuild-delivery]
+steps:
+  # This step deploys the new version of our container image
+  # in the trip-analyzer-dev Kubernetes Engine cluster.
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'trip-deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=trip-analyzer-$_ENV'
+
+#  # This step deploys the new version of our container image
+#  # in the trip-analyzer-prod Kubernetes Engine cluster.
+#  - name: 'gcr.io/cloud-builders/kubectl'
+#    args: ['apply', '-f', 'trip-deployment.yaml']
+#    env:
+#      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+#      - 'CLOUDSDK_CONTAINER_CLUSTER=trip-analyzer-prod'
+# [END cloudbuild-delivery]
