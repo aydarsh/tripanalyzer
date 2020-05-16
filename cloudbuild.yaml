@@ -54,7 +54,11 @@ steps:
       - |
         set -x && \
         sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" env/trip-deployment.yaml.tpl | \
-        sed "s/COMMIT_SHA/${SHORT_SHA}/g" | tee env/trip-deployment.yaml
+        sed "s/COMMIT_SHA/${SHORT_SHA}/g" | tee env/trip-deployment.yaml \
+        cp env/trip-deployment.yaml /root/.ssh/
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
 
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: /bin/sh
@@ -63,6 +67,7 @@ steps:
       - |
         set -x && \
         cd tripanalyzer && \
+        cp /root/.ssh/trip-deployment.yaml env/trip-deployment.yaml && \
         ls -l env/ && \
         git add env/trip-deployment.yaml && \
         git commit -m "Deploying image gcr.io/${PROJECT_ID}/trip:${SHORT_SHA}
