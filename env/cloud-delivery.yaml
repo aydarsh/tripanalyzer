@@ -1,0 +1,67 @@
+# [START cloudbuild-delivery]
+steps:
+  # This step deploys the new version of our container image
+  # in the trip-analyzer-dev Kubernetes Engine cluster.
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'env/trip-deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=trip-analyzer-$_ENV'
+
+  # This step deploys the new version of our container image
+  # in the trip-analyzer-prod Kubernetes Engine cluster.
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'env/trip-deployment.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=trip-analyzer-prod'
+
+
+  # Access the github_key file from Secret Manager
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=github_key > /root/.ssh/id_github' ]
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # Set up git with key and domain
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        chmod 600 /root/.ssh/id_github
+        cat <<EOF >/root/.ssh/config
+        Hostname github.com
+        IdentityFile /root/.ssh/id_github
+        EOF
+        mv known_hosts.github /root/.ssh/known_hosts
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # This step copies the applied manifest to the master branch
+  # The COMMIT_SHA variable is automatically
+  # replaced by Cloud Build.
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        set -x && \
+        git clone git@github.com:aydarsh/tripanalyzer.git && \
+        cd tripanalyzer && \
+        git config user.email aydarsh@gmail.com && \
+        git fetch origin master && git checkout master && \
+        git checkout $COMMIT_SHA env/trip-deployment.yaml && \
+        git commit -m "Manifest from commit $COMMIT_SHA
+        $(git log --format=%B -n 1 $COMMIT_SHA)" && \
+        git push origin master
+        git tag -a $SHORT_SHA -m "Tag was added on $(date) on PROD"
+        git push --tags
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+# [END cloudbuild-delivery]

@@ -1,13 +1,79 @@
 steps:
   - name: maven:3-openjdk-11
     entrypoint: mvn
-    args: ['--version']
-  - name: maven:3-openjdk-11
-    entrypoint: mvn
     args: ["test"]
   - name: maven:3-openjdk-11
     entrypoint: mvn
     args: ["package", "-Dmaven.test.skip=true"]
   - name: gcr.io/cloud-builders/docker
     args: ["build", "-t", "gcr.io/$PROJECT_ID/trip:$SHORT_SHA", "."]
+
+  # Access the github_key file from Secret Manager
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=github_key > /root/.ssh/id_github' ]
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # Set up git with key and domain
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        chmod 600 /root/.ssh/id_github
+        cat <<EOF >/root/.ssh/config
+        Hostname github.com
+        IdentityFile /root/.ssh/id_github
+        EOF
+        mv known_hosts.github /root/.ssh/known_hosts
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # Connect to the repository
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        git clone git@github.com:aydarsh/tripanalyzer.git && \
+        cd tripanalyzer && \
+        git config user.email aydarsh@gmail.com && \
+        git checkout dev
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # This step generates the new manifest
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        set -x && \
+        sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" env/trip-deployment.yaml.tpl | \
+        sed "s/COMMIT_SHA/${SHORT_SHA}/g" | tee env/trip-deployment.yaml && \
+        cp env/trip-deployment.yaml /root/.ssh/
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        set -x && \
+        cd tripanalyzer && \
+        cp /root/.ssh/trip-deployment.yaml env/trip-deployment.yaml && \
+        git add env/trip-deployment.yaml && \
+        git commit -m "Deploying image gcr.io/${PROJECT_ID}/trip:${SHORT_SHA}
+        Built from commit ${COMMIT_SHA} of repository trip
+        Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
+        git push origin dev
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
 images: ["gcr.io/$PROJECT_ID/trip:$SHORT_SHA"]
