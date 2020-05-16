@@ -1,6 +1,4 @@
 steps:
-  - name: gcr.io/cloud-builders/git
-    args: ['fetch', '--unshallow']
   - name: maven:3-openjdk-11
     entrypoint: mvn
     args: ["test"]
@@ -17,7 +15,40 @@ steps:
       - |
         sed "s/GOOGLE_CLOUD_PROJECT/${PROJECT_ID}/g" env/trip-deployment.yaml.tpl | \
         sed "s/COMMIT_SHA/${SHORT_SHA}/g" > env/trip-deployment.yaml
-  # This step pushes the manifest back to the repository
+
+  # Access the github_key file from Secret Manager
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: [ '-c', 'gcloud secrets versions access latest --secret=github_key > /root/.ssh/id_github' ]
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # Set up git with key and domain
+  - name: 'gcr.io/cloud-builders/git'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        chmod 600 /root/.ssh/id_github
+        cat <<EOF >/root/.ssh/config
+        Hostname github.com
+        IdentityFile /root/.ssh/id_github
+        EOF
+        mv known_hosts.github /root/.ssh/known_hosts
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
+  # Connect to the repository
+  - name: 'gcr.io/cloud-builders/git'
+    args:
+      - clone
+      - git@github.com:aydarsh/tripanalyzer.git
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
+
   - name: 'gcr.io/cloud-builders/git'
     entrypoint: /bin/sh
     args:
