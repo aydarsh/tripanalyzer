@@ -55,6 +55,7 @@ steps:
       - '-c'
       - |
         set -x && \
+        cd tripanalyzer && \
         git config user.email aydarsh@gmail.com && \
         git fetch origin dev && git checkout dev && \
         git add env/trip-deployment.yaml && \
