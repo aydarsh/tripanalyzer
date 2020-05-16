@@ -13,4 +13,8 @@
 * The following APIs are enabled by means of the GCP Console:
   * Kubernetes Engine API
   * Cloud Resource Manager API
- 
+
+## Configuring CI/CD
+* The application runs on Google Kubernetes Engine
+* CI/CD is performed by Cloud Build and is configured in [GitOps style](https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build)
+
