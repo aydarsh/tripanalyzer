@@ -1,7 +1,6 @@
 steps:
-  - name: maven:3-openjdk-11
-    entrypoint: mvn
-    args: ['--version']
+  - name: gcr.io/cloud-builders/git
+    args: ['fetch', '--unshallow']
   - name: maven:3-openjdk-11
     entrypoint: mvn
     args: ["test"]
@@ -25,7 +24,6 @@ steps:
       - '-c'
       - |
         set -x && \
-        git clone https://github.com/aydarsh/tripanalyzer.git && \
         git config user.email aydarsh@gmail.com && \
         git fetch origin dev && git checkout dev && \
         git add env/trip-deployment.yaml && \
