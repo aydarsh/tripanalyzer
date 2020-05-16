@@ -47,7 +47,7 @@ steps:
         path: /root/.ssh
 
   # This step generates the new manifest
-  - name: 'gcr.io/cloud-builders/gcloud'
+  - name: 'gcr.io/cloud-builders/git'
     entrypoint: /bin/sh
     args:
       - '-c'
