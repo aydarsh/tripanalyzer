@@ -58,7 +58,7 @@ steps:
         git commit -m "Manifest from commit $COMMIT_SHA
         $(git log --format=%B -n 1 $COMMIT_SHA)" && \
         git push origin master
-        git tag -a $COMMIT_SHA -m "Tag was added on $(date) on PROD"
+        git tag -a $SHORT_SHA -m "Tag was added on $(date) on PROD"
         git push --tags
     volumes:
       - name: 'ssh'
