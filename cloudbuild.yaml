@@ -63,4 +63,7 @@ steps:
         Built from commit ${COMMIT_SHA} of repository trip
         Author: $(git log --format='%an <%ae>' -n 1 HEAD)" && \
         git push origin dev
+    volumes:
+      - name: 'ssh'
+        path: /root/.ssh
 images: ["gcr.io/$PROJECT_ID/trip:$SHORT_SHA"]
