@@ -25,6 +25,7 @@ steps:
       - '-c'
       - |
         set -x && \
+        git clone https://github.com/aydarsh/tripanalyzer.git && \
         git config user.email aydarsh@gmail.com && \
         git fetch origin dev && git checkout dev && \
         git add env/trip-deployment.yaml && \
