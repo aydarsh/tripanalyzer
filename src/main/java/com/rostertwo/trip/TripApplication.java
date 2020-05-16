@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TripApplication {
 	@RequestMapping("/")
 	public String home() {
-		return "Hello World from Kubernetes";
+		return "Hello from Kubernetes";
 	}
 
 	public static void main(String[] args) {
