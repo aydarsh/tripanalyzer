@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: trip
-          image: gcr.io/trip-analyzer-prj/trip:71cd0de
+          image: gcr.io/trip-analyzer-prj/trip:755071a
           ports:
             - containerPort: 8080
 ---
