@@ -6,12 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@RestController
 public class TripApplication {
-	@RequestMapping("/")
-	public String home() {
-		return "Hello from Kubernetes";
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(TripApplication.class, args);
