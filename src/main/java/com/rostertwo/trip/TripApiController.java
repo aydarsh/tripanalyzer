@@ -30,7 +30,7 @@ public class TripApiController {
     
     private static final Logger log = LoggerFactory.getLogger(TripApiController.class);
     private final VehiclePushAnalysis output = new VehiclePushAnalysis();
-    @Value("${APIKEY:defaultkey}")
+    @Value("${APIKEY:defaultKey}")
     private String APIKEY;
     
     @PostMapping("/trip")
