@@ -11,9 +11,9 @@ public class VehiclePushAnalysis {
   private String vin;
   private String departure;
   private String destination;
-  private ArrayList<ModelBreak> refuelStops = null;
+  private ArrayList<ModelBreak> refuelStops = new ArrayList<ModelBreak>();
   private Float consumption;
-  private ArrayList<ModelBreak> breaks = null;
+  private ArrayList<ModelBreak> breaks = new ArrayList<ModelBreak>();
 
   public String getVin() {
     return vin;
