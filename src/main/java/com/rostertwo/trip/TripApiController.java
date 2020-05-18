@@ -35,7 +35,6 @@ public class TripApiController {
     
     @PostMapping("/trip")
     public VehiclePushAnalysis analyze(@RequestBody VehiclePush input) throws Exception {
-        log.info("Value from @Value: {}", APIKEY);
         ArrayList<VehiclePushDataPoint> dataPoints = input.getData();
         Collections.sort(dataPoints);
         LatLng departureLatLng = new LatLng(dataPoints.get(0).getPositionLat(), dataPoints.get(0).getPositionLong());
