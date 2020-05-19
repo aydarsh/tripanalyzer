@@ -9,7 +9,14 @@ public class ModelBreak   {
   private Long endTimestamp;
   private Float positionLat;
   private Float positionLong;
-
+  
+  public ModelBreak(Long startTimestamp, Long endTimestamp, Float positionLat, Float positionLong) {
+    this.startTimestamp = startTimestamp;
+    this.endTimestamp = endTimestamp;
+    this.positionLat = positionLat;
+    this.positionLong = positionLong;
+  }
+  
   public Long getStartTimestamp() {
     return startTimestamp;
   }
