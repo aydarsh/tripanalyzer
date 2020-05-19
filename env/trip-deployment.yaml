@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: trip
-          image: gcr.io/trip-analyzer-prj/trip:8141561
+          image: gcr.io/trip-analyzer-prj/trip:1de39e5
           env:
           - name: APIKEY
             valueFrom:
