@@ -24,10 +24,10 @@ spec:
                 name: geocodingkey
                 key: APIKEY
           - name: BASICAUTHKEY
-                      valueFrom:
-                        secretKeyRef:
-                          name: basicauthkey
-                          key: BASICAUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: basicauthkey
+                key: BASICAUTHKEY
           ports:
             - containerPort: 8080
 ---
