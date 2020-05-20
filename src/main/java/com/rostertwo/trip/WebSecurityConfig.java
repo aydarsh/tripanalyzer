@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   
-  @Value("${BASICAUTHKEY:password}")
+  @Value("${BASICAUTHKEY:deafaultValue}")
   private String BASICAUTHKEY;
   
   @Override
