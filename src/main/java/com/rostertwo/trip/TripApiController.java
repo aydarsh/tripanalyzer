@@ -33,7 +33,7 @@ public class TripApiController {
     public static final long EPS = 1;
     private static final Logger log = LoggerFactory.getLogger(TripApiController.class);
     private final VehiclePushAnalysis output = new VehiclePushAnalysis();
-    @Value("${APIKEY:defaultKey}")
+    @Value("${APIKEY:defaultValue}")
     private String APIKEY;
     
 
