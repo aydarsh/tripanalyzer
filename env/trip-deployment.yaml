@@ -16,13 +16,18 @@ spec:
     spec:
       containers:
         - name: trip
-          image: gcr.io/trip-analyzer-prj/trip:2ff1a66
+          image: gcr.io/trip-analyzer-prj/trip:9901e6a
           env:
           - name: APIKEY
             valueFrom:
               secretKeyRef:
                 name: geocodingkey
                 key: APIKEY
+          - name: BASICAUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: basicauthkey
+                key: BASICAUTHKEY
           ports:
             - containerPort: 8080
 ---
