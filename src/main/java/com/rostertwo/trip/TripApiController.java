@@ -36,7 +36,6 @@ public class TripApiController {
     @Value("${APIKEY:defaultValue}")
     private String APIKEY;
     
-
     @PostMapping("/trip")
     public VehiclePushAnalysis analyze(@RequestBody VehiclePush input) throws Exception {
         ArrayList<VehiclePushDataPoint> dataPoints = input.getData();

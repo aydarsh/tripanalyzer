@@ -1,5 +1,7 @@
 package com.rostertwo.trip;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   
+  private static final Logger log = LoggerFactory.getLogger(TripApiController.class);
   @Value("${BASICAUTHKEY:deafaultValue}")
   private String BASICAUTHKEY;
   
@@ -28,6 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
   {
+    log.info("BASICAUTHKEY value: {}", BASICAUTHKEY);
     auth.inMemoryAuthentication()
         .withUser("admin")
         .password("{noop}" + BASICAUTHKEY)
