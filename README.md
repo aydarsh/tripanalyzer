@@ -42,8 +42,9 @@ Create `trip-analyzer-prod` service account, select `Editor` role and create a k
 With this configuration when you change files in the `terraform/` directory and push it to the `dev` branch `trip-analyzer-dev` infrastructure will be changed. Similarly, when files in the `terraform/` directory change for the `master` branch `trip-analyzer-prod` infrastructure will be changed.  
 
 Now go to the **Google Cloud web console** -> **APIs & Services** -> **Enable APIs & Services**, enter `Kubernetes` in the search field, press `Kubernetes Engine API` and then **Enable**. Also enable the following APIs:  
-* `Cloud Resource Manager API`.
-* `Geocoding API`  
+* `Cloud Resource Manager API`
+* `Geocoding API`
+* `Cloud Build API`
 
 ## Configuring Kubernetes secrets
 
@@ -61,5 +62,52 @@ kubectl create secret generic basicauthkey --from-literal=BASICAUTHKEY=<password
 Do the same steps for the `trip-analyzer-prod` cluster with different values for `<APIkey>` and `<password>`.  
 
 ## Configuring CI/CD
-CI/CD is performed by Cloud Build and is configured in [GitOps style](https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build)
+I configured CI/CD by means of Google Cloud Build in [GitOps style](https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build).  
 
+To setup CI/CD pipelines go to the **Google Cloud web console** -> **Cloud Build** -> **Triggers**. Press **Connect repository**, select `GitHub (Cloud Build GitHub App)` and then click **Continue**. Add your GitHub account, select your `tripanalyzer` repository, check the `I understand that GitHub content...` checkbox and **Connect repository** button. Now go to the **Triggers** page and click **Create trigger**. Use the following values to configure the trigger:  
+
+| **Parameter** | **Value** |
+| --- | --- |
+| Name | push-trigger-app |
+| Event | Push to a branch |
+| Branch | ^dev$ |
+| Included files filter (glob) | Dockerfile, src/\*\*, cloudbuild.yaml |
+| Ignored files filter (glob) | terraform/\*\*, env/\*\* |
+| File type | Cloud Build configuration file (yaml or json) |
+| Cloud Build configuration file location | cloudbuild.yaml |  
+
+Press **Save** button. Add new trigger with the following values:  
+
+| **Parameter** | **Value** |
+| --- | --- |
+| Name | push-trigger-env |
+| Event | Push to a branch |
+| Branch | ^dev$ |
+| Included files filter (glob) | env/\*\* |
+| Ignored files filter (glob) | terraform/\*\*, src/\*\* |
+| File type | Cloud Build configuration file (yaml or json) |
+| Cloud Build configuration file location | env/cloud-delivery.yaml |
+
+**Add variable**
+
+| **Variable** | **Value** |
+| --- | --- |
+| _ENV | dev |
+Press **Save** button.
+
+Now go to the **Settings** page and enable `Kubernetes Engine Developer` role for the Cloud Build service account:  
+![Service account permissions](images/cloudbuild_permissions.png)  
+After that go to the **Google Cloud web console** -> **IAM & Admin**. Find member email that ends with `@cloudbuild.gserviceaccount.com` and click pen button to edit its permissions. Press **Add another role**, type `secret` and select `Secret Manager Secret Accessor`, press **Save**.  
+
+Go to the **Google Cloud web console** -> **Secret Manager** -> **Create secret**. Name new secret as `github_key`, press **Browse** and select your GitHub deploy key.  
+
+Good. Now one more step before running examples. Open `clounbuild.yaml` file and substitute your values in the following lines:
+```commandline
+git clone git@github.com:aydarsh/tripanalyzer.git
+git config user.email aydarsh@gmail.com 
+```
+Also edit `env/cloud-delivery.yaml` file with your values.  
+
+## Testing the application
+
+Example files are in the `examples/` directory. Use either **Postman**, **VSCode REST Client Extension** `curl` command to send `POST` request to the `trip-analyzer-dev` LoadBalancer endpoint data from these files. Do not forget to set Basic Auth credentials before you send the request. Username is `admin` and password is `<password>`, that is the value you set in the **Configuring Kubernetes secrets** step. 

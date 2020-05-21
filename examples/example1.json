@@ -1,0 +1,21 @@
+{
+  "breakThreshold": 300,
+  "gasTankSize": 55,
+  "vin": "WDD1671591Z000999",
+  "data": [
+    {
+      "fuelLevel": 35,
+      "odometer": 230000,
+      "positionLat": 55.830433,
+      "positionLong": 49.066082,
+      "timestamp": 1592632800
+    },
+    {
+      "fuelLevel": 15,
+      "odometer": 230300,
+      "positionLat": 54.849600,
+      "positionLong": 53.076890,
+      "timestamp": 1592649000
+    }
+  ]
+}

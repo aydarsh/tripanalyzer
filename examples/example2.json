@@ -1,0 +1,119 @@
+{
+  "breakThreshold": 900,
+  "gasTankSize": 50,
+  "vin": "WDD1671591Z000999",
+  "data": [
+    { 
+      "fuelLevel": 50,
+      "odometer": 231500,
+      "positionLat": 45.03526,
+      "positionLong": 38.97648,
+      "timestamp": 1561104600  
+    },
+    { 
+      "fuelLevel": 20,
+      "odometer": 232270,
+      "positionLat": 47.30466,
+      "positionLong": 39.86389,
+      "timestamp": 1561119000  
+    },
+    {
+      "fuelLevel": 90,
+      "odometer": 232270,
+      "positionLat": 47.30466,
+      "positionLong": 39.86389,
+      "timestamp": 1561119600   
+    },
+    { 
+      "fuelLevel": 80,
+      "odometer": 232370,
+      "positionLat": 48.16943,
+      "positionLong": 40.26348,
+      "timestamp": 1561124400   
+    },
+    {
+      "fuelLevel": 80,
+      "odometer": 232370,
+      "positionLat": 48.16943,
+      "positionLong": 40.26348,
+      "timestamp": 1561125000   
+    },
+    { 
+      "fuelLevel": 40,
+      "odometer": 232770,
+      "positionLat": 48.70819,
+      "positionLong": 44.51534,
+      "timestamp": 1561143000   
+    },
+    {
+      "fuelLevel": 60,
+      "odometer": 232770,
+      "positionLat": 48.70819,
+      "positionLong": 44.51534,
+      "timestamp": 1561144800   
+    },
+    { 
+      "fuelLevel": 50,
+      "odometer": 232940,
+      "positionLat": 50.08084,
+      "positionLong": 45.40480,
+      "timestamp": 1561152600   
+    },
+    { 
+      "fuelLevel": 50,
+      "odometer": 232940,
+      "positionLat": 50.08084,
+      "positionLong": 45.40480,
+      "timestamp": 1561190400   
+    },
+    { 
+      "fuelLevel": 25,
+      "odometer": 233130,
+      "positionLat": 51.53002,
+      "positionLong": 46.03468,
+      "timestamp": 1561199400   
+    },
+    { 
+      "fuelLevel": 95,
+      "odometer": 233130,
+      "positionLat": 51.53002,
+      "positionLong": 46.03468,
+      "timestamp": 1561200000   
+    },
+    { 
+      "fuelLevel": 80,
+      "odometer": 233310,
+      "positionLat": 52.51363,
+      "positionLong": 48.01681,
+      "timestamp": 1561209000   
+    },
+    {
+      "fuelLevel": 80,
+      "odometer": 233310,
+      "positionLat": 52.51363,
+      "positionLong": 48.01681,
+      "timestamp": 1561211400   
+    },
+    { 
+      "fuelLevel": 55,
+      "odometer": 233610,
+      "positionLat": 54.97229,
+      "positionLong": 48.29290,
+      "timestamp": 1561226400   
+    },
+    {
+      "fuelLevel": 55,
+      "odometer": 233610,
+      "positionLat": 54.97229,
+      "positionLong": 48.29290,
+      "timestamp": 1561228200   
+    },
+    { 
+      "fuelLevel": 40,
+      "odometer": 233730,
+      "positionLat": 55.83338,
+      "positionLong": 49.15419,
+      "timestamp": 1561235400   
+    }
+  ]
+}
