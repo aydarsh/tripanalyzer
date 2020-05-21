@@ -41,9 +41,25 @@ Create `trip-analyzer-prod` service account, select `Editor` role and create a k
 
 With this configuration when you change files in the `terraform/` directory and push it to the `dev` branch `trip-analyzer-dev` infrastructure will be changed. Similarly, when files in the `terraform/` directory change for the `master` branch `trip-analyzer-prod` infrastructure will be changed.  
 
-Now go the **Google Cloud web console** -> **APIs & Services** -> **Enable APIs & Services**, enter `Kubernetes` in the search field, press `Kubernetes Engine API` and then **Enable**. Then search for and enable `Cloud Resource Manager API`.  
+Now go to the **Google Cloud web console** -> **APIs & Services** -> **Enable APIs & Services**, enter `Kubernetes` in the search field, press `Kubernetes Engine API` and then **Enable**. Also enable the following APIs:  
+* `Cloud Resource Manager API`.
+* `Geocoding API`  
+
+## Configuring Kubernetes secrets
+
+So far, so good. Now we will configure `Geocoding API` and `Basic Auth` credentials to use in our Kubernetes clusters. We will get Google Geocoding API key, then start Terraform pipelines to create `trip-analyzer-dev` and `trip-analyzer-prod` kubernetes clusters, use `kubectl` command to create corresponding secrets.  
+  
+Now go to the **Google Cloud web console** -> **APIs & Services** -> **Credentials**. In the **API Keys** section find your key, it looks like `AIzaSyCEAq..`, and press a button next to it to copy. Store this value in Notepad++, we will use it in the next step.  
+
+Go to the Terraform Cloud console, then to the `trip-analyzer` organisation and click `trip-analyzer-dev` workspace. Press **Queue plan** dropdown box and then **Queue plan** button. This will start infrastructure build pipeline. Have a look at planned changes and then press **Confirm** to complete infrastructure build.  
+
+Switch to the **Google Cloud web console** -> **Kubernetes Engine**. On this page you can see the `trip-analyzer-dev` and `trip-analyzer-prod` clusters. Once they are ready press **Connect** button, then **Run in Cloud Shell**. Substitute API key value for `<APIkey>` and your password for `<password>` in the following commands and run them:  
+```commandline
+kubectl create secret generic geocodingkey --from-literal=APIKEY=<APIkey>
+kubectl create secret generic basicauthkey --from-literal=BASICAUTHKEY=<password>
+``` 
+Do the same steps for the `trip-analyzer-prod` cluster with different values for `<APIkey>` and `<password>`.  
 
 ## Configuring CI/CD
-* The application runs on Google Kubernetes Engine
-* CI/CD is performed by Cloud Build and is configured in [GitOps style](https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build)
+CI/CD is performed by Cloud Build and is configured in [GitOps style](https://cloud.google.com/kubernetes-engine/docs/tutorials/gitops-cloud-build)
 
