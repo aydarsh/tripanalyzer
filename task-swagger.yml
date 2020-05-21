@@ -1,0 +1,157 @@
+swagger: "2.0"
+info:
+  description: |
+    - Implement the specified REST Endpoint
+    - Protect the API with BasicAuth
+    - Use Docker to run your application
+    - Use one of the following languages&#58; Go, Java, Python, C++
+    - Automate the infrastructure rollout
+    - Use an external service to determine the city name for depature and destination
+    - Upload your solution to a private GitHub repository
+    - Provide a link to the secured hosted instance of your solution
+    - Provide the following files together with your code&#58;
+      * Dockerfile
+      * Build-Script
+      * Deployment-Script
+      * Kubernetes deployment YAML (if Kubernetes is used)
+      * Infrastructure automation scripts
+      * README.md with documentation how to deploy the infrastructure and the application
+  version: "1.0.0"
+  title: "Mercedes-Benz AG Programming Challenge"
+basePath: "/v1"
+tags:
+- name: "Vehicle Trip Analyzer"
+paths:
+  /trip:
+    post:
+      tags:
+      - "Vehicle Trip Analyzer"
+      summary: "analyze a vehicle trip"
+      description: "this endpoints gets a list of data points from a vehicle. the whole list represents a trip from one location to another with several stops to refuel or just to eat some cookies."
+      operationId: "analyze"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "vehicle data that needs to be analyzed"
+        required: true
+        schema:
+          $ref: "#/definitions/VehiclePush"
+      responses:
+        200:
+          description: "returns analyzed vehicle data"
+          schema:
+            $ref: "#/definitions/VehiclePushAnalysis"
+        401:
+          description: "Unauthorized"
+        403:
+          description: "Forbidden"
+        405:
+          description: "Invalid input"
+      security:
+        - BasicAuth: []
+securityDefinitions:
+  BasicAuth:
+    type: basic
+definitions:
+  VehiclePush:
+    type: "object"
+    properties:
+      vin:
+        type: "string"
+        description: "vehicle identification number"
+        example: "WDD1671591Z000999"
+      breakThreshold:
+        type: "integer"
+        format: "int32"
+        description: "threshold to calculate if a car just stopped or did a break"
+        example: "1800"
+      gasTankSize:
+        type: "integer"
+        format: "int32"
+        description: "the size of the gas tank in liter"
+        example: "80"
+      data:
+        type: "array"
+        items:
+          $ref: '#/definitions/VehiclePushDataPoint'
+  VehiclePushDataPoint:
+    type: "object"
+    properties:
+      timestamp:
+        type: "integer"
+        format: "int64"
+        description: "unix timestamp"
+        example: "1559137020"
+      odometer:
+        type: "integer"
+        format: "int32"
+        description: "odometer value for a given time"
+        example: "7200"
+      fuelLevel:
+        type: "integer"
+        format: "int32"
+        description: "fuel level for a given time in percent"
+        minimum: 0
+        maximum: 100
+        example: 52
+      positionLat:
+        type: "number"
+        format: "float"
+        description: "latitude position for a given time"
+        example: "48.771990"
+      positionLong:
+        type: "number"
+        format: "float"
+        description: "longitude position for a given time"
+        example: "9.172787"
+  VehiclePushAnalysis:
+    type: "object"
+    properties:
+      vin:
+        type: "string"
+        description: "vehicle identification number"
+        example: "WDD1671591Z000999"
+      departure:
+        type: "string"
+        description: "city/location where the trip started"
+        example: "Stuttgart"
+      destination:
+        type: "string"
+        description: "city/location where the trip ended"
+        example: "München"
+      refuelStops:
+        type: "array"
+        items:
+          $ref: '#/definitions/Break'
+        description: "a list of all refuel stops during the trip"
+      consumption:
+        type: "number"
+        format: "float"
+        description: "the average consumption during the trip (l/100km)"
+        example: "5.5"
+      breaks:
+        type: "array"
+        items:
+          $ref: '#/definitions/Break'
+        description: "a list of all breaks during the trip including the refuel stops"
+  Break:
+    type: "object"
+    properties:
+      startTimestamp:
+        type: "integer"
+        format: "int64"
+      endTimestamp:
+        type: "integer"
+        format: "int64"
+      positionLat:
+        type: "number"
+        format: "float"
+      positionLong:
+        type: "number"
+        format: "float"
+    
+    
