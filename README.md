@@ -93,6 +93,7 @@ Press **Save** button. Add new trigger with the following values:
 | **Variable** | **Value** |
 | --- | --- |
 | _ENV | dev |
+
 Press **Save** button.
 
 Now go to the **Settings** page and enable `Kubernetes Engine Developer` role for the Cloud Build service account:  
