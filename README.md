@@ -111,4 +111,4 @@ Also edit `env/cloud-delivery.yaml` file with your values.
 
 ## Testing the application
 
-Example files are in the `examples/` directory. Use either **Postman**, **VSCode REST Client Extension** `curl` command to send `POST` request to the `trip-analyzer-dev` LoadBalancer endpoint data from these files. Do not forget to set Basic Auth credentials before you send the request. Username is `admin` and password is `<password>`, that is the value you set in the **Configuring Kubernetes secrets** step. 
+Example files are in the [`examples/`](examples/) directory. Use either **Postman**, **VSCode REST Client Extension** or `curl` command to send a `POST` request to the `trip-analyzer-dev` LoadBalancer endpoint data from these files. Do not forget to set Basic Auth credentials before you send the request. Username is `admin` and password is `<password>`, that is the value you set in the **Configuring Kubernetes secrets** step. 
