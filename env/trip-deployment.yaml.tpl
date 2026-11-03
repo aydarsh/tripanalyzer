@@ -17,6 +17,17 @@ spec:
       containers:
         - name: trip
           image: gcr.io/GOOGLE_CLOUD_PROJECT/trip:COMMIT_SHA
+          env:
+          - name: APIKEY
+            valueFrom:
+              secretKeyRef:
+                name: geocodingkey
+                key: APIKEY
+          - name: BASICAUTHKEY
+            valueFrom:
+              secretKeyRef:
+                name: basicauthkey
+                key: BASICAUTHKEY
           ports:
             - containerPort: 8080
 ---

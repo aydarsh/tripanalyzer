@@ -50,9 +50,10 @@ steps:
       - '-c'
       - |
         set -x && \
-        git clone git@github.com:aydarsh/tripanalyzer.git && \
+        git clone "git@github.com:${REPO_FULL_NAME}.git" tripanalyzer && \
         cd tripanalyzer && \
-        git config user.email aydarsh@gmail.com && \
+        git config user.name "Cloud Build" && \
+        git config user.email "${SERVICE_ACCOUNT_EMAIL}" && \
         git fetch origin master && git checkout master && \
         git checkout $COMMIT_SHA env/trip-deployment.yaml && \
         git commit -m "Manifest from commit $COMMIT_SHA
