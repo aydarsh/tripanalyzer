@@ -1,25 +1,45 @@
 # Vehicle Trip Analyzer  
 
-## Task definition
-* Implement the [specified](task-swagger.yml) REST Endpoint
-* Protect the API with BasicAuth
-* Use Docker to run your application
-* Use one of the following languages: Go, Java, Python, C++
-* Automate the infrastructure rollout
-* Use an external service to determine the city name for depature and destination
-* Upload your solution to a private GitHub repository
-* Provide a link to the secured hosted instance of your solution
-* Provide the following files together with your code:
-  - Dockerfile
-  - Build-Script
-  - Deployment-Script
-  - Kubernetes deployment YAML (if Kubernetes is used)
-  - Infrastructure automation scripts
-  - README.md with documentation how to deploy the infrastructure and the application
+TripAnalyzer is a Java 21 service built with Spring Boot 4.1.2. Send vehicle telemetry to `POST /v1/trip` to get the departure and destination cities, average fuel consumption, breaks and refueling stops. See the [API specification](task-swagger.yml) for the request and response fields.
 
----
+## Build and run locally
 
-Create a fork of the [tripanalyzer](https://github.com/aydarsh/tripanalyzer) repository to your account.  
+From the repository root, use JDK 21 and the included Maven wrapper to run the tests and build the executable JAR:
+
+```sh
+./mvnw clean verify
+```
+
+The tests use a local HTTP server and a stub geocoder. To run the application, set these environment variables in your shell:
+
+| Variable | Purpose |
+| --- | --- |
+| `APIKEY` | Google Maps API key with the Geocoding API enabled |
+| `BASICAUTHKEY` | HTTP Basic password for the user `admin` |
+
+Start the service on port 8080:
+
+```sh
+java -jar target/trip.jar
+```
+
+From a second terminal in the repository root, submit a sample trip. When prompted, enter the password configured in `BASICAUTHKEY`.
+
+```sh
+curl --user admin --header 'Content-Type: application/json' \
+  --data-binary @examples/example1.json http://localhost:8080/v1/trip
+```
+
+To run the same JAR in Docker, stop the local process first, then run the following commands from the shell with the two variables exported:
+
+```sh
+docker build -t tripanalyzer .
+docker run --rm -p 127.0.0.1:8080:8080 -e APIKEY -e BASICAUTHKEY tripanalyzer
+```
+
+## Cloud deployment
+
+The following sections describe the original Terraform and Google Cloud setup. For deployment from your own GitHub account, fork this repository.
 
 ## Configuring Terraform  
 I used [Terraform Cloud](https://app.terraform.io) to automate infrastructure management. In fact, the infrastructure can be deployed by issuing terraform commands from the [terraform/](terraform/) directory. However, I would like to give instructions on how to configure Terraform Cloud.  
@@ -27,10 +47,10 @@ I used [Terraform Cloud](https://app.terraform.io) to automate infrastructure ma
 Firstly, sign up and create a Terraform Cloud account. Create an organization named `trip-analyzer` and two workspaces: `trip-analyzer-dev` and `trip-analyzer-prod`. These workspaces are for dev and prod environment infrastructure resources:    
 ![Terraform organization and workspaces](images/workspaces.png)
 
-Then, connect workspaces to your GitHub repository. Choose option **Only trigger runs when files in specified paths change** and enter `terraform` in the input field. For **VCS branch** enter `dev`:
+Then, connect workspaces to your GitHub repository. Choose option **Only trigger runs when files in specified paths change** and enter `terraform` in the input field. For **VCS branch** choose `dev` in the dev workspace and `master` in the prod workspace:
 ![Version control settings](images/workspace_settings.png)  
 
-After that, configure variables for your workspaces. Add variable `env` with value `dev`. I used Google Cloud Platform for the infrastructure, that is why I need Google credentials. In the next step I will explain how to add `google_credentials` variable. Do not add it now:
+After that, configure variables for your workspaces. Set `env` to `dev` in the dev workspace and `prod` in the prod workspace. I used Google Cloud Platform for the infrastructure, that is why I need Google credentials. In the next step I will explain how to add `google_credentials` variable. Do not add it now:
 ![Variables configuration](images/terraform_variables.png)
 
 ## Configuring Google credentials  
@@ -71,7 +91,7 @@ To setup CI/CD pipelines go to the **Google Cloud web console** -> **Cloud Build
 | Name | push-trigger-app |
 | Event | Push to a branch |
 | Branch | ^dev$ |
-| Included files filter (glob) | Dockerfile, src/\*\*, cloudbuild.yaml |
+| Included files filter (glob) | Dockerfile, pom.xml, src/\*\*, examples/\*\*, cloudbuild.yaml |
 | Ignored files filter (glob) | terraform/\*\*, env/\*\* |
 | File type | Cloud Build configuration file (yaml or json) |
 | Cloud Build configuration file location | cloudbuild.yaml |  
@@ -102,13 +122,8 @@ After that go to the **Google Cloud web console** -> **IAM & Admin**. Find membe
 
 Go to the **Google Cloud web console** -> **Secret Manager** -> **Create secret**. Name new secret as `github_key`, press **Browse** and select your GitHub deploy key.  
 
-Good. Now one more step before running examples. Open `clounbuild.yaml` file and substitute your values in the following lines:
-```commandline
-git clone git@github.com:aydarsh/tripanalyzer.git
-git config user.email aydarsh@gmail.com 
-```
-Also edit `env/cloud-delivery.yaml` file with your values.  
+Both triggers clone the triggering GitHub repository and use the build service account email for Git commits.
 
-## Testing the application
+## Test the deployed service
 
-Example files are in the [`examples/`](examples/) directory. Use either **Postman**, **VSCode REST Client Extension** or `curl` command to send a `POST` request to the `trip-analyzer-dev` LoadBalancer endpoint data from these files. Do not forget to set Basic Auth credentials before you send the request. Username is `admin` and password is `<password>`, that is the value you set in the **Configuring Kubernetes secrets** step. 
+Use the same sample request as above with the deployed service URL in place of `http://localhost:8080`. Use the `admin` password from the target cluster's `basicauthkey` secret.

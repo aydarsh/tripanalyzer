@@ -1,12 +1,13 @@
-package com.rostertwo.trip.model;
+package tripanalyzer.model;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * VehiclePushAnalysis
- */
-
+@Getter
+@Setter
 public class VehiclePushAnalysis {
   private String vin;
   private String departure;
@@ -14,27 +15,6 @@ public class VehiclePushAnalysis {
   private ArrayList<ModelBreak> refuelStops = new ArrayList<ModelBreak>();
   private Float consumption;
   private ArrayList<ModelBreak> breaks = new ArrayList<ModelBreak>();
-
-  public String getVin() {
-    return vin;
-  }
-  public void setVin(String vin) {
-    this.vin = vin;
-  }
-
-  public String getDeparture() {
-    return departure;
-  }
-  public void setDeparture(String departure) {
-    this.departure = departure;
-  }
-
-  public String getDestination() {
-    return destination;
-  }
-  public void setDestination(String destination) {
-    this.destination = destination;
-  }
 
   public VehiclePushAnalysis addRefuelStopsItem(ModelBreak refuelStopsItem) {
     if (this.refuelStops == null) {
@@ -47,16 +27,6 @@ public class VehiclePushAnalysis {
   public List<ModelBreak> getRefuelStops() {
     return refuelStops;
   }
-  public void setRefuelStops(ArrayList<ModelBreak> refuelStops) {
-    this.refuelStops = refuelStops;
-  }
-
-  public Float getConsumption() {
-    return consumption;
-  }
-  public void setConsumption(Float consumption) {
-    this.consumption = consumption;
-  }
 
    public VehiclePushAnalysis addBreaksItem(ModelBreak breaksItem) {
     if (this.breaks == null) {
@@ -68,9 +38,6 @@ public class VehiclePushAnalysis {
 
   public List<ModelBreak> getBreaks() {
     return breaks;
-  }
-  public void setBreaks(ArrayList<ModelBreak> breaks) {
-    this.breaks = breaks;
   }
   
   @Override
@@ -99,4 +66,3 @@ public class VehiclePushAnalysis {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

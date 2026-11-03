@@ -1,4 +1,4 @@
-package com.rostertwo.trip;
+package tripanalyzer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

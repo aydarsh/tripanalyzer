@@ -1,38 +1,18 @@
-package com.rostertwo.trip.model;
+package tripanalyzer.model;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- * VehiclePush
- */
+@Getter
+@Setter
 public class VehiclePush {
   private String vin;
   private Integer breakThreshold;
-  private Integer gasTankSize ;
+  private Integer gasTankSize;
   private ArrayList<VehiclePushDataPoint> data;
-  
-  public String getVin() {
-    return vin;
-  }
-  public void setVin(String vin) {
-    this.vin = vin;
-  }
-  
-  public Integer getBreakThreshold() {
-    return breakThreshold;
-  }
-  public void setBreakThreshold(Integer breakThreshold) {
-    this.breakThreshold = breakThreshold;
-  }
-  
-  public Integer getGasTankSize() {
-    return gasTankSize;
-  }
-  public void setGasTankSize(Integer gasTankSize) {
-    this.gasTankSize = gasTankSize;
-  }
-  
+
   public VehiclePush addDataItem(VehiclePushDataPoint dataItem) {
     if (this.data == null) {
       this.data = new ArrayList<VehiclePushDataPoint>();
@@ -40,14 +20,7 @@ public class VehiclePush {
     this.data.add(dataItem);
     return this;
   }
-  
-  public ArrayList<VehiclePushDataPoint> getData() {
-    return data;
-  }
-  public void setData(ArrayList<VehiclePushDataPoint> data) {
-    this.data = data;
-  }
-  
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

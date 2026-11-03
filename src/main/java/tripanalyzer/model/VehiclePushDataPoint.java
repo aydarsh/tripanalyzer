@@ -1,51 +1,17 @@
-package com.rostertwo.trip.model;
+package tripanalyzer.model;
 
-/**
- * VehiclePushDataPoint
- */
+import lombok.Getter;
+import lombok.Setter;
 
-public class VehiclePushDataPoint implements Comparable<VehiclePushDataPoint>   {
+@Getter
+@Setter
+public class VehiclePushDataPoint implements Comparable<VehiclePushDataPoint> {
   private Long timestamp;
   private Integer odometer;
   private Integer fuelLevel;
   private Float positionLat;
   private Float positionLong;
 
-  public Long getTimestamp() {
-    return timestamp;
-  }
-  public void setTimestamp(Long timestamp) {
-    this.timestamp = timestamp;
-  }
-
-  public Integer getOdometer() {
-    return odometer;
-  }
-  public void setOdometer(Integer odometer) {
-    this.odometer = odometer;
-  }
-
-  public Integer getFuelLevel() {
-    return fuelLevel;
-  }
-  public void setFuelLevel(Integer fuelLevel) {
-    this.fuelLevel = fuelLevel;
-  }
-
-  public Float getPositionLat() {
-    return positionLat;
-  }
-  public void setPositionLat(Float positionLat) {
-    this.positionLat = positionLat;
-  }
-
-  public Float getPositionLong() {
-    return positionLong;
-  }
-  public void setPositionLong(Float positionLong) {
-    this.positionLong = positionLong;
-  }
-  
   @Override
   public int compareTo(VehiclePushDataPoint dataPoint) {
     return this.getTimestamp().compareTo(dataPoint.getTimestamp());
@@ -76,4 +42,3 @@ public class VehiclePushDataPoint implements Comparable<VehiclePushDataPoint>   
     return o.toString().replace("\n", "\n    ");
   }
 }
-
